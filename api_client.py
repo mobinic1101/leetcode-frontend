@@ -30,22 +30,22 @@ class ApiClient:
     def get_url(self, name, **kwargs):
         return self.endpoints[name].substitute(**kwargs)
     
-    def sign_up(self, username, password):
+    def sign_up(self, username, password, token=None):
         url = self.get_url("sign_up")
-        return self.client.post(url, json={"username": username, "password": password})
-    
-    def login(self, username, password):
+        return self.client.post(url, json={"username": username, "password": password}, headers={"Authorization": f"Token {token}"})
+
+    def login(self, username, password, token=None):
         url = self.get_url("login")
-        return self.client.post(url, json={"username": username, "password": password})
-    
+        return self.client.post(url, json={"username": username, "password": password}, headers={"Authorization": f"Token {token}"})
+
     def logout(self, token):
         url = self.get_url("logout")
         return self.client.post(url, headers={"Authorization": f"Token {token}"})
-    
+
     def get_user_detail(self, pk, token=None):
         url = self.get_url("user_detail", pk=pk)
         return self.client.get(url, headers={"Authorization": f"Token {token}"})
-    
+
     def update_user_detail(self, data: Dict, token=None):
         url = self.get_url("update_user_detail")
         return self.client.put(url, json=data, headers={"Authorization": f"Token {token}"})
@@ -54,37 +54,37 @@ class ApiClient:
         url = self.get_url("user_solved_problems")
         return self.client.get(url, headers={"Authorization": f"Token {token}"})
 
-    def get_problems_list(self):
+    def get_problems_list(self, token=None):
         url = self.get_url("problem_list")
-        return self.client.get(url)
-    
-    def get_problem_detail(self, pk):
-        url = self.get_url("problem_detail", pk=pk)
-        return self.client.get(url)
-    
-    def get_problem_comments(self, pk):
-        url = self.get_url("problem_comments", pk=pk)
-        return self.client.get(url)
-    
-    def post_comment(self, pk, comment: str):
-        url = self.get_url("problem_comments", pk=pk)
-        return self.client.post(url, json={"comment": comment})
-    
-    def get_topics(self):
-        url = self.get_url("topic_list")
-        return self.client.get(url)
-    
-    def get_testcases(self, problem_id):
-        url = self.get_url("testcase_list", problem_id=problem_id)
-        return self.client.get(url)
-    
-    def run_code(self, problem_id, python_file):
-        url = self.get_url("run_code", problem_id=problem_id)
-        return self.client.post(url, json={"python_file": python_file})
+        return self.client.get(url, headers={"Authorization": f"Token {token}"})
 
-    def get_code_running_result(self, problem_id, execution_id):
+    def get_problem_detail(self, pk, token=None):
+        url = self.get_url("problem_detail", pk=pk)
+        return self.client.get(url, headers={"Authorization": f"Token {token}"})
+
+    def get_problem_comments(self, pk, token=None):
+        url = self.get_url("problem_comments", pk=pk)
+        return self.client.get(url, headers={"Authorization": f"Token {token}"})
+
+    def post_comment(self, pk, comment: str, token=None):
+        url = self.get_url("problem_comments", pk=pk)
+        return self.client.post(url, json={"comment": comment}, headers={"Authorization": f"Token {token}"})
+
+    def get_topics(self, token=None):
+        url = self.get_url("topic_list")
+        return self.client.get(url, headers={"Authorization": f"Token {token}"})
+
+    def get_testcases(self, problem_id, token=None):
+        url = self.get_url("testcase_list", problem_id=problem_id)
+        return self.client.get(url, headers={"Authorization": f"Token {token}"})
+
+    def run_code(self, problem_id, python_file, token=None):
+        url = self.get_url("run_code", problem_id=problem_id)
+        return self.client.post(url, json={"python_file": python_file}, headers={"Authorization": f"Token {token}"})
+
+    def get_code_running_result(self, problem_id, execution_id, token=None):
         url = self.get_url("get_code_running_result", problem_id=problem_id, execution_id=execution_id)
-        return self.client.get(url)
+        return self.client.get(url, headers={"Authorization": f"Token {token}"})
 
 
 # urlpatterns = [
