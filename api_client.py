@@ -9,22 +9,39 @@ class APIClient:
         self.client = Client(base_url=base_url)
         self.headers = lambda token: {"Authorization": f"Token {token}"}
 
-    def extract_data(self, response: Response, page_name: str="") -> Context:
+    def extract_data(self, response: Response, page_name: str = "") -> Context:
         context = {
             "page_name": page_name,
-            "is_authenticated": False,
             "error": "",
-            "data": None
-            }
-        if response.status_code == HTTPStatus.NOT_FOUND:
-            ...
-        elif response.status_code == HTTPStatus.BAD_REQUEST:
-            ...
-        elif response.status_code == HTTPStatus.UNAUTHORIZED: # if invalid token
-            ...
+            "data": None,
+        }
+        data = response.json()
+        if (
+            response.status_code == HTTPStatus.NOT_FOUND
+            or response.status_code == HTTPStatus.BAD_REQUEST
+            or response.status_code == HTTPStatus.UNAUTHORIZED
+            or response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+        ):
+            context["error"] = data.get("detail")
+        elif response.status_code == HTTPStatus.OK:
+            context["data"] = data
 
-    def get(self, url, token, **query_params):
-        response = self.client.get(url, self.headers(token), QueryParams(**query_params))
+        return Context(**context)
+    def get(self, url, token="", **query_params):
+        response = self.client.get(
+            url, self.headers(token), QueryParams(**query_params)
+        )
+        return self.extract_data(response, url)
     
+    def post(self, url, json=None, data=None, files=None, token=""):
+        response = self.client.post(
+            url=url,
+            headers=self.headers(token),
+            json=json,
+            data=data,
+            files=files
+        )
+        return self.extract_data(response, url)
+
 
 print(HTTPStatus.UNAUTHORIZED)
