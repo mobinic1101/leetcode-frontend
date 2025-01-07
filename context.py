@@ -3,11 +3,12 @@ class Context:
         self.page_name = page_name
         self.error = error
         self.data = data
+        if not data:
+            self.data = {}
 
     def get_dict(self):
         return {
             "page_name": self.page_name,
-            "is_authenticated": self.is_authenticated,
             "error": self.error,
             **self.data
         }

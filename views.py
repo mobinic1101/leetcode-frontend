@@ -1,24 +1,20 @@
 from flask import Blueprint, render_template, request
-from httpx import Client
+from api_client import APIClient
+from pprint import pprint
 
-blueprint = Blueprint("app", __name__)
-client = Client(base_url="http://127.0.0.1:8000/api/")
-client_headers = lambda token: {"Authorization": f"Bearer {token}"}
-
-
-def get_context(page_name, is_authenticated, error=None, data: dict={}):
-    return {
-        "page_name": page_name,
-        "is_authenticated": is_authenticated,
-        "error": error,
-        **data
-    }
+blueprint = Blueprint("views", __name__)
+client = APIClient()
 
 
 @blueprint.route("/")
 def home():
-    context = {"page_name": str(home.__name__), "is_authenticated": True}
-    token = request.cookies.get("token")
-
-    return render_template("home.html", context={"page_name": "Home"})
+    token = request.headers.get("Authorization")
+    print("token: ", token)
+    if token:
+        token = token.decode("utf-8")
+    context = client.get("/users/me/", token)
+    context.page_name = home.__name__.capitalize()
+    context = context.get_dict()
+    pprint(context)
+    return render_template("home.html", context=context)
 

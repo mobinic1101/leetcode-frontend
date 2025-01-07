@@ -4,7 +4,7 @@ from context import Context
 
 
 class APIClient:
-    def __init__(self, base_url="http://127.0.0.1:8000/api/"):
+    def __init__(self, base_url="http://127.0.0.1:8000/api"):
         self.base_url = base_url
         self.client = Client(base_url=base_url)
         self.headers = lambda token: {"Authorization": f"Token {token}"}
@@ -28,19 +28,25 @@ class APIClient:
 
         return Context(**context)
     def get(self, url, token="", **query_params):
-        response = self.client.get(
-            url, self.headers(token), QueryParams(**query_params)
-        )
+        if token:
+            response = self.client.get(
+                url, headers=self.headers(token), params=QueryParams(**query_params)
+            )
+        else:
+            response = self.client.get(url=url, params=QueryParams(**query_params))
         return self.extract_data(response, url)
     
     def post(self, url, json=None, data=None, files=None, token=""):
-        response = self.client.post(
-            url=url,
-            headers=self.headers(token),
-            json=json,
-            data=data,
-            files=files
-        )
+        if token:
+            response = self.client.post(
+                url=url,
+                headers=self.headers(token),
+                json=json,
+                data=data,
+                files=files
+            )
+        else:
+            response = self.client.post(url=url, json=json, data=data, files=files)
         return self.extract_data(response, url)
 
 
