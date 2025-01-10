@@ -1,3 +1,4 @@
+from flask import request
 from httpx import Client, QueryParams, Response
 from http import HTTPStatus
 from context import Context
@@ -15,7 +16,9 @@ class APIClient:
             "error": "",
             "data": None,
         }
+        # print("RESPONSE CONTENT: ", response.content)
         data = response.json()
+        print("BACKEND RESPONSE: ", data)
         if (
             response.status_code == HTTPStatus.NOT_FOUND
             or response.status_code == HTTPStatus.BAD_REQUEST
@@ -23,31 +26,50 @@ class APIClient:
             or response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
         ):
             context["error"] = data.get("detail")
+            if data.get("non_field_errors", None):
+                context["error"] = data["non_field_errors"][0]
+
         elif response.status_code == HTTPStatus.OK:
             context["data"] = data
 
         return Context(**context)
-    def get(self, url, token="", **query_params):
+
+    def get(self, url, token="", extract_data=False, **query_params):
         if token:
             response = self.client.get(
                 url, headers=self.headers(token), params=QueryParams(**query_params)
             )
         else:
             response = self.client.get(url=url, params=QueryParams(**query_params))
-        return self.extract_data(response, url)
-    
-    def post(self, url, json=None, data=None, files=None, token=""):
+        if extract_data:
+            return self.extract_data(response, url)
+        return response
+
+    def post(self, url, json=None, data=None, files=None, token="", extract_data=True):
         if token:
             response = self.client.post(
-                url=url,
-                headers=self.headers(token),
-                json=json,
-                data=data,
-                files=files
+                url=url, headers=self.headers(token), json=json, data=data, files=files
             )
         else:
             response = self.client.post(url=url, json=json, data=data, files=files)
-        return self.extract_data(response, url)
+        if extract_data:
+            return self.extract_data(response, url)
+        return response
 
-
-print(HTTPStatus.UNAUTHORIZED)
+    def get_quick_user_details(self):
+        quick_user_details = {
+            "username": None,
+            "profile_pic": None,
+            "is_authenticated": False,
+        }
+        token = request.cookies.get("token")
+        print("TOKEN: ", token)
+        if token:
+            response: Response = self.client.get(
+                "/users/me/",
+                headers=self.headers(request.cookies.get("token")),
+                params={"quick": "yes"},
+            )
+            if response.status_code == 200:
+                return response.json()
+        return quick_user_details
