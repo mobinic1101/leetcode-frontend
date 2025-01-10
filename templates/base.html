@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
     <title>{{page_name}}</title>
+    <style>
+        .fix-justify {
+            display: flex;
+            justify-content: space-between;
+            border-radius: 0px;
+        }
+    </style>
 </head>
 <body>
     {% include 'navbar.html' %}
@@ -14,9 +21,19 @@
     {% if messages %}
         {% for category, message in messages %}
             {% if category == "success" %}
-                <div class="alert alert-success" role="alert">{{ message }}</div>
+                <div class="alert alert-success alert-dismissable fade show fix-justify" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+                </div>
             {% else %}
-                <div class="alert alert-danger" role="alert">{{ message }}</div>
+                <div class="alert alert-danger alert-dismissable fade show fix-justify" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                    <!-- <span aria-hidden="true">&times;</span> -->
+
+                </div>
+                
             {% endif %}
         {% endfor %}
     {% endif %}

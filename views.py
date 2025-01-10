@@ -29,7 +29,6 @@ def login():
             token = context.data.get("token")
             response = redirect("/", code=302)
             response.set_cookie("token", token, secure=True, httponly=True)
-            flash("Successful login!", category="success")
             return response
         flash("Incorrect username or password", category="error")
         context.data.update({"username": username if username else ""})
