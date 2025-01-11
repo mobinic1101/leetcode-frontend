@@ -42,16 +42,16 @@
               aria-expanded="false"
             >
               <img
-                src="/static/images/profile-pic.jpg"
+                src="{{profile_pic}}"
                 alt="Profile"
                 class="rounded-circle me-2"
                 width="30"
                 height="30"
               />
-              Profile
+              {{username}}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-              <li><a class="dropdown-item" href="/profile">My Profile</a></li>
+              <li><a class="dropdown-item" href="/profile">{{username}}</a></li>
               <li><a class="dropdown-item" href="/settings">Settings</a></li>
               <li>
                 <hr class="dropdown-divider" />

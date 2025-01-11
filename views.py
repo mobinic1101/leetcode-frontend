@@ -11,6 +11,7 @@ client = APIClient()
 def home():
     context = Context()
     context.data = client.get_quick_user_details()
+    print("HOME CONTEXT DATA: ", context.data)
     context.page_name = home.__name__.capitalize()
     context = context.get_dict()
     return render_template("home.html", **context)
@@ -34,6 +35,11 @@ def login():
         context.data.update({"username": username if username else ""})
     context.page_name = login.__name__
     return render_template("login.html", **context.get_dict())
+
+
+@blueprint.route("/logout")
+def logout():
+    ...
 
 
 # urlpatterns = [

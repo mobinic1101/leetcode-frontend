@@ -59,7 +59,7 @@ class APIClient:
     def get_quick_user_details(self):
         quick_user_details = {
             "username": None,
-            "profile_pic": None,
+            "profile_pic": "http://127.0.0.1:8000",
             "is_authenticated": False,
         }
         token = request.cookies.get("token")
@@ -71,5 +71,8 @@ class APIClient:
                 params={"quick": "yes"},
             )
             if response.status_code == 200:
-                return response.json()
+                data = response.json()
+                profile_pic = "http://127.0.0.1:8000" + data["profile_pic"] # "http://127.0.0.1:8000/media/profile_pics/someprofile.jpg"
+                data["profile_pic"] = profile_pic
+                return data
         return quick_user_details
