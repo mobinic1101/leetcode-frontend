@@ -45,7 +45,7 @@ class APIClient:
             return self.extract_data(response, url)
         return response
 
-    def post(self, url, json=None, data=None, files=None, token="", extract_data=True):
+    def post(self, url, json={}, data=None, files=None, token="", extract_data=True):
         if token:
             response = self.client.post(
                 url=url, headers=self.headers(token), json=json, data=data, files=files

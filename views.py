@@ -34,13 +34,25 @@ def login():
         flash("Incorrect username or password", category="error")
         context.data.update({"username": username if username else ""})
     context.page_name = login.__name__
-    return render_template("login.html", **context.get_dict())
+    last_used_username = ""
+    if context.data.get("username"):
+        last_used_username = context.data.get("username")
+    return render_template("login.html", **context.get_dict(), last_used_username=last_used_username)
 
 
-@blueprint.route("/logout")
+@blueprint.route("/logout", methods=["POST"])
 def logout():
-    ...
-
+    token = request.cookies.get("token")
+    if not token:
+        return "<h1>Not logged in</h1>"
+    response = client.post("/logout/", token=token, extract_data=False)
+    print(response.status_code)
+    if response.status_code == 200:
+        flash("Logged out successfully", category="success")
+        response = redirect("/", code=302)
+        response.delete_cookie("token")
+        return response
+    return "<h1>Not logged in</h1>"
 
 # urlpatterns = [
 # 	path("api-token-auth/", obtain_auth_token),
