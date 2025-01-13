@@ -3,11 +3,11 @@ from pprint import pprint
 from api_client import APIClient
 from context import Context
 
-blueprint = Blueprint("views", __name__)
+views = Blueprint("views", __name__)
 client = APIClient()
 
 
-@blueprint.route("/")
+@views.route("/")
 def home():
     context = Context()
     context.data = client.get_quick_user_details()
@@ -17,7 +17,7 @@ def home():
     return render_template("home.html", **context)
 
 
-@blueprint.route("/login", methods=["POST", "GET"])
+@views.route("/login", methods=["POST", "GET"])
 def login():
     context = Context(data=client.get_quick_user_details())
     if request.method == "POST":
@@ -40,7 +40,7 @@ def login():
     return render_template("login.html", **context.get_dict(), last_used_username=last_used_username)
 
 
-@blueprint.route("/logout", methods=["POST"])
+@views.route("/logout", methods=["POST"])
 def logout():
     token = request.cookies.get("token")
     if not token:
@@ -53,28 +53,3 @@ def logout():
         response.delete_cookie("token")
         return response
     return "<h1>Not logged in</h1>"
-
-# urlpatterns = [
-# 	path("api-token-auth/", obtain_auth_token),
-# 	path("sign-up/", auth.sign_up, name="sign_up"),
-#     path("logout/", auth.logout, name="logout"),
-
-#     # User-related paths
-#     path("users/<int:pk>/", views.UserDetailView.as_view(), name="user_detail"),
-#     path("users/me/", views.my_detail, name="my_detail"),
-#     path("users/me/solved-problems/", views.UserSolvedProblemsView.as_view(), name="user_solved_problems"),
-
-#     # Problem-related paths
-#     path("problems/", views.ProblemListView.as_view(), name="problem_list"),  # List all problems
-#     path("problems/<int:pk>/", views.ProblemDetailView.as_view(), name="problem_detail"),  # Retrieve a specific problem
-#     path("problems/<int:pk>/comments/", views.ProblemCommentView.as_view(), name="problem_comments"),  # Comments on a specific problem
-
-#     # Topic-related paths
-#     path("topics/", views.TopicListView.as_view(), name="topic_list"),  # List all topics
-    
-#     # Test case-related paths
-#     path("problems/<int:problem_id>/testcases/", views.TestCaseListView.as_view(), name="testcase_list"),  # List all test cases for a specific problem
-#     path("problems/<int:problem_id>/run/", views.CodeRunningView.as_view(), name="run_code"),  # Run a code snippet for a specific problem
-#     path("problems/get-result/<int:problem_id>/<str:execution_id>/", views.get_code_running_result, name="get_code_running_result"),  # Run a code snippet for a specific problem
-
-# ]

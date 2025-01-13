@@ -12,6 +12,8 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
+
+      <!-- navbar links -->
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
@@ -30,6 +32,16 @@
             <a class="nav-link" href="/about">About</a>
           </li>
         </ul>
+
+        <!-- search bar -->
+        <div style="display: flex; justify-content: center; width: 100%;">
+          <form class="form-inline my-2 my-lg-0" action="" method="get" style="display: flex">
+            <input class="form-control mr-sm-2" type="search" name="search" id="" placeholder="Search for problems..." style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit" style="border-top-left-radius: 0px; border-bottom-left-radius: 0px;">Search</button>
+          </form>
+        </div>
+
+        <!-- profile -->
         <ul class="navbar-nav">
           {% if is_authenticated %}
           <li class="nav-item dropdown">
@@ -37,7 +49,7 @@
               class="nav-link dropdown-toggle d-flex align-items-center"
               href="#"
               id="profileDropdown"
-              role="button"
+              role="buttonDropdown"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
