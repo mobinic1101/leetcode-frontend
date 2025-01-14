@@ -1,5 +1,14 @@
-from flask import Blueprint, render_template, request, session, flash, redirect, make_response
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    session,
+    flash,
+    redirect,
+    make_response,
+)
 from pprint import pprint
+from typing import Dict
 from api_client import APIClient
 from context import Context
 
@@ -23,7 +32,9 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-        context: Context = client.post("/api-token-auth/", json={"username": username, "password": password})
+        context: Context = client.post(
+            "/api-token-auth/", json={"username": username, "password": password}
+        )
         if not context.error:
             flash("Logged in successfully", category="success")
             print("TOKEN: ", context.data.get("token"))
@@ -37,7 +48,9 @@ def login():
     last_used_username = ""
     if context.data.get("username"):
         last_used_username = context.data.get("username")
-    return render_template("login.html", **context.get_dict(), last_used_username=last_used_username)
+    return render_template(
+        "login.html", **context.get_dict(), last_used_username=last_used_username
+    )
 
 
 @views.route("/logout", methods=["POST"])
@@ -53,3 +66,36 @@ def logout():
         response.delete_cookie("token")
         return response
     return "<h1>Not logged in</h1>"
+
+
+@views.route("/sign-up", methods=["POST", "GET"])
+def sign_up():
+    page_name = sign_up.__name__.replace("-", " ").title()
+    last_used_username = ""
+    context = Context(page_name=page_name, data=client.get_quick_user_details())
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password1 = request.form.get("password1")
+        password2 = request.form.get("password2")
+
+        if password1 == password2:
+            api_response = client.post(
+                "/sign-up/",
+                json={"username": username, "password": password1},
+                extract_data=False,
+            )
+            data: Dict = api_response.json()
+            if api_response.status_code == 201:
+                token = data.get("token")
+                response = redirect("/", code=302)
+                response.set_cookie("token", token, secure=True, httponly=True)
+                flash("Signed up successfully", category="success")
+                return response
+            else:
+                flash(data.get("detail"), category="error")
+        else:
+            flash("Passwords don't match", category="error")
+        last_used_username = username
+
+    return render_template("sign-up.html", **context.get_dict(), last_used_username = last_used_username)

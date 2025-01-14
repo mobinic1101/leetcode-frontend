@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2 align="center">SignUp</h2>
+            <form method="post" style="display: flex; justify-content: center; flex-direction: column" id="form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" value="{{last_used_username}}" required>
+                </div>
+                <div class="form-group">
+                    <label for="password1">Password</label>
+                    <input type="password" class="form-control" id="password1" name="password1" required>
+                    <label for="password2">Password(confirm)</label>
+                    <input type="password" class="form-control" id="password2" name="password2" placeholder="retype your password here..." required>
+                </div>
+                <hr>
+                <button type="submit" class="btn btn-primary" id="submit">SignUp!</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+{% block js %}
+<script>
+    console.log("sign-up.js loaded");
+    const form = document.getElementById("form");
+    document.getElementById("form").addEventListener("submit", (e) => {
+        // Reset custom validity and styles
+        const password1 = e.target.elements.password1;
+        const password2 = e.target.elements.password2;
+        const nav = document.getElementsByTagName("nav")[0];
+        
+        console.log(password1.value);
+        console.log(password2.value);
+        
+        if (password1.value.length < 8) {
+            e.preventDefault();
+            form.insertAdjacentHTML("beforeend", "<p style='color: red;'>Password must be at least 8 characters long</p>");
+        }
+        
+        else if (password1.value !== password2.value) {
+            e.preventDefault();
+            form.insertAdjacentHTML("beforeend", "<p style='color: red;'>Passwords don't match</p>");
+            password2.value = ""; // Clear the second password field
+        }
+    });
+</script>
+{% endblock js %}
