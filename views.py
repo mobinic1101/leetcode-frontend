@@ -26,6 +26,7 @@ def home():
     return render_template("home.html", **context)
 
 
+# user specific views
 @views.route("/login", methods=["POST", "GET"])
 def login():
     context = Context(data=client.get_quick_user_details())
@@ -99,3 +100,9 @@ def sign_up():
         last_used_username = username
 
     return render_template("sign-up.html", **context.get_dict(), last_used_username = last_used_username)
+
+
+@views.route("/problems")
+def problems():
+    client.get_quick_user_details()
+    return render_template("problems.html")

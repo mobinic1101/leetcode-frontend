@@ -57,6 +57,23 @@ class APIClient:
         return response
 
     def get_quick_user_details(self):
+        """
+        Retrieves quick user details from the server using an authentication token
+        stored in the user's cookies. If the token is valid, it returns the user's
+        username, profile picture URL, and authentication status. If the token is
+        missing or invalid, it returns default values indicating the user is not
+        authenticated.
+
+        Returns:
+            dict: A dictionary containing the user's username, profile picture URL,
+                and authentication status.
+                example output if authenticated (if not the is_authenticated will be False and username will be None):
+                {
+                    "username": "someusername",
+                    "profile_pic": "http://127.0.0.1:8000/media/profile_pics/someprofile.jpg",
+                    "is_authenticated": True
+                }
+        """
         quick_user_details = {
             "username": None,
             "profile_pic": "http://127.0.0.1:8000",
