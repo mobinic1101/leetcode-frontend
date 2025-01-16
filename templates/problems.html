@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="row">
+    <!-- Problems List -->
+    <div class="col-md-9">
+      <h2>Problems List</h2>
+      <ul class="list-group">
+        <!-- Loop through the problems list -->
+         {% for problem in problems %}
+         {% set diff = problem["difficulty"] %}
+          {% if diff == 1 %}
+        <li class="list-group-item list-group-item-primary">
+          <h5>{{ problem["title"] }}</h5>
+          <p>Difficulty: Easy</p>
+          <p>{{ problem["topic"] }}</p>
+        </li>
+          {% elif diff == 2 %}
+        <li class="list-group-item list-group-item-warning">
+          <h5>{{ problem["title"] }}</h5>
+          <p>Difficulty: Medium</p>
+          <p>{{ problem["topic"] }}</p>
+        </li>
+          {% elif diff == 3 %}
+        <li class="list-group-item list-group-item-danger">
+          <h5>{{ problem["title"] }}</h5>
+          <p>Difficulty: Hard</p>
+          <p>{{ problem["topic"] }}</p>
+        </li>
+          {% else %}
+        <li class="list-group-item list-group-item-danger">
+          <h5>{{ problem["title"] }}</h5>
+          <p>Difficulty: NotSpecified</p>
+          <p>{{ problem["topic"] }}</p>
+        </li>
+          {% endif %}
+        {% endfor %}
+        <!-- Continue for more problems -->
+      </ul>
+    </div>
+    <!-- Filter Sidebar -->
+    <div class="col-md-3">
+      <h4>Filter Problems</h4>
+      <form method="get">
+        <div class="form-group mb-3">
+          <!-- search bar -->
+          <input class="form-control mr-sm-2" type="search" name="search" id="" placeholder="Search..." style="border-top-right-radius: 0px; border-bottom-right-radius: 0px;">
+          <hr>
+          <!-- topics -->
+          <div style="display: flex; flex-direction: column;">
+          {% for topic in topics %}
+            <div style="display: flex;">
+              <input class="form-check-input" type="checkbox" id="{{ topic["id"] }}" value="{{ topic["topic"] }}" name="topic">
+              <label class="form-check-label" for="{{ topic["id"] }}">{{ topic["topic"] }}</label>
+            </div>
+          {% endfor %}
+          </div>
+          <hr>
+          <label for="difficulty">Difficulty</label>
+          <select class="form-control" id="difficulty" name="difficulty">
+            <option value="">All Difficulties</option>
+            <option value="1">Easy</option>
+            <option value="2">Medium</option>
+            <option value="3">Hard</option>
+          </select>
+          <hr>
+          <button type="submit" class="btn btn-primary" style="width: 100%;">Apply Filters</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

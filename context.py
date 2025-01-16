@@ -7,8 +7,28 @@ class Context:
             self.data = {}
 
     def get_dict(self):
-        return {
+        """
+        get a dictionary representation of the object,
+        if data is a list the scheme will look like this:
+        {
+            "page_name": self.page_name,
+            "error": self.error,
+            "items": self.data
+        }
+        if not (if data was a dict) it will look like this:
+        {
             "page_name": self.page_name,
             "error": self.error,
             **self.data
         }
+        """
+        data = {
+            "page_name": self.page_name,
+            "error": self.error,
+        }
+        if isinstance(self.data, dict):
+            data.update({**self.data})
+        else:
+            data["items"] = self.data
+        
+        return data

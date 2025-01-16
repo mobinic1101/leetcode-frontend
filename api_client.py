@@ -18,7 +18,7 @@ class APIClient:
         }
         # print("RESPONSE CONTENT: ", response.content)
         data = response.json()
-        print("BACKEND RESPONSE: ", data)
+        # print("BACKEND RESPONSE: ", data)
         if (
             response.status_code == HTTPStatus.NOT_FOUND
             or response.status_code == HTTPStatus.BAD_REQUEST
@@ -34,13 +34,13 @@ class APIClient:
 
         return Context(**context)
 
-    def get(self, url, token="", extract_data=False, **query_params):
+    def get(self, url, token="", extract_data=False, query_params: dict={}):
         if token:
             response = self.client.get(
-                url, headers=self.headers(token), params=QueryParams(**query_params)
+                url, headers=self.headers(token), params=query_params
             )
         else:
-            response = self.client.get(url=url, params=QueryParams(**query_params))
+            response = self.client.get(url=url, params=query_params)
         if extract_data:
             return self.extract_data(response, url)
         return response

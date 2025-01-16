@@ -102,7 +102,12 @@ def sign_up():
     return render_template("sign-up.html", **context.get_dict(), last_used_username = last_used_username)
 
 
-@views.route("/problems")
+@views.route("/problems", methods=["GET"])
 def problems():
-    client.get_quick_user_details()
-    return render_template("problems.html")
+    user = client.get_quick_user_details()
+    problems_and_topics: list = client.get("/problems/", query_params={"with_topics": "1"}).json()
+    page_name = problems.__name__.capitalize()
+    pprint(problems_and_topics)
+    return render_template("problems.html", **user, **problems_and_topics, page_name=page_name)
+
+    # TODO: capture multiple selected topics in your backend to filter based on multiple topics.
