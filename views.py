@@ -105,7 +105,7 @@ def sign_up():
 def problems():
     user = client.get_quick_user_details()
     query_params = {"with_topics": "yes"}
-    
+
     # grabbing query parameters
     search = request.args.get("search", "")
     difficulty = request.args.get("difficulty", "")
@@ -121,4 +121,7 @@ def problems():
     # pprint(problems_and_topics)
     return render_template("problems.html", **user, **problems_and_topics, page_name=page_name)
 
-    # TODO: capture multiple selected topics in your backend to filter based on multiple topics.
+
+@views.route("/problem/<int:problem_id>", methods=["GET", "POST"])
+def problem(problem_id):
+    return f"SORRY NOT IMPLEMENTED YET problem id == {problem_id}"

@@ -6,35 +6,32 @@
     <!-- Problems List -->
     <div class="col-md-9">
       <h2>Problems List</h2>
-      <ul class="list-group">
+      <ul class="list-group list-group-flush">
         <!-- Loop through the problems list -->
          {% for problem in problems %}
          {% set diff = problem["difficulty"] %}
-          {% if diff == 1 %}
-        <li class="list-group-item list-group-item-primary">
-          <h5>{{ problem["title"] }}</h5>
-          <p>Difficulty: Easy</p>
-          <p>{{ problem["topic"] }}</p>
-        </li>
-          {% elif diff == 2 %}
-        <li class="list-group-item list-group-item-warning">
-          <h5>{{ problem["title"] }}</h5>
-          <p>Difficulty: Medium</p>
-          <p>{{ problem["topic"] }}</p>
-        </li>
-          {% elif diff == 3 %}
-        <li class="list-group-item list-group-item-danger">
-          <h5>{{ problem["title"] }}</h5>
-          <p>Difficulty: Hard</p>
-          <p>{{ problem["topic"] }}</p>
-        </li>
-          {% else %}
-        <li class="list-group-item list-group-item-danger">
-          <h5>{{ problem["title"] }}</h5>
-          <p>Difficulty: NotSpecified</p>
-          <p>{{ problem["topic"] }}</p>
-        </li>
-          {% endif %}
+        <a href="{{ url_for('views.problem', problem_id=problem['id']) }}" class="text-decoration-none">
+          <li class="list-group-item list-group-item-action">
+            <div class="d-flex justify-content-between">
+                <h5>{{ problem["title"] }}</h5>
+              <p>
+                {% if diff == 1 %}
+                  <span class="badge bg-primary">Easy</span>
+                {% elif diff == 2 %}
+                  <span class="badge bg-warning">Medium</span>
+                {% elif diff == 3 %}
+                  <span class="badge bg-danger">Hard</span>
+                {% else %}
+                  <span class="badge bg-secondary">NotSpecified</span>
+                {% endif %}
+              </p>
+            </div>
+            <div>
+              <p>{{ problem["description"] }}</p>
+              <span class="badge bg-secondary">{{ problem["topic"] }}</span>
+            </div>
+          </li>
+        </a>
         {% endfor %}
         <!-- Continue for more problems -->
       </ul>
