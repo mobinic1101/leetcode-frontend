@@ -26,7 +26,6 @@ def home():
     return render_template("home.html", **context)
 
 
-# user specific views
 @views.route("/login", methods=["POST", "GET"])
 def login():
     context = Context(data=client.get_quick_user_details())
