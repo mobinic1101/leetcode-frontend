@@ -2,11 +2,13 @@ from flask import request
 from httpx import Client, QueryParams, Response
 from http import HTTPStatus
 from context import Context
+import settings
 
 
 class APIClient:
-    def __init__(self, base_url="http://127.0.0.1:8000/api"):
-        self.base_url = base_url
+    def __init__(self, base_url=settings.DRF_HOST):
+        self.base_url_raw = base_url
+        self.base_url = base_url + "/api"
         self.client = Client(base_url=base_url)
         self.headers = lambda token: {"Authorization": f"Token {token}"}
 
@@ -87,7 +89,7 @@ class APIClient:
             )
             if response.status_code == 200:
                 data = response.json()
-                data["profile_pic"] = "http://127.0.0.1:8000" + data["profile_pic"] # "http://127.0.0.1:8000/media/profile_pics/someprofile.jpg"
+                data["profile_pic"] = self.base_url_raw + data["profile_pic"] # "http://127.0.0.1:8000/media/profile_pics/someprofile.jpg"
                 quick_user_details.update(data)
                 # quick_user_details["username"] = data["username"]
                 quick_user_details["is_authenticated"] = True
