@@ -9,7 +9,7 @@ class APIClient:
     def __init__(self, base_url=settings.DRF_HOST):
         self.base_url_raw = base_url
         self.base_url = base_url + "/api"
-        self.client = Client(base_url=base_url)
+        self.client = Client(base_url=self.base_url)
         self.headers = lambda token: {"Authorization": f"Token {token}"}
 
     def extract_data(self, response: Response, page_name: str = "") -> Context:
