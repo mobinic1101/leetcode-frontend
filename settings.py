@@ -14,6 +14,7 @@ def get_settings(path):
     
 settings_dict = get_settings(SETTINGS_PATH)
 
+DRF_HOST = settings_dict.get("drf_host", "http://127.0.0.1:8000")
 FASTAPI_HOST = settings_dict.get("fastapi_host", "localhost")
 FASTAPI_PORT = int(settings_dict.get("fastapi_port", 5000))
 REDIS_HOST = settings_dict.get("redis_host", "localhost")
