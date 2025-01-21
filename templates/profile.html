@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <div class="card mx-auto" style="max-width: 600px;">
+    <div class="card-header text-center">
+      <h3>User {{username}}</h3>
+    </div>
+    <div class="card-body text-center">
+      <!-- Profile Picture -->
+      <div class="mb-3">
+        <img
+          src="{{ user.profile_pic }}"
+          alt="Profile Picture"
+          class="rounded-circle"
+          width="150"
+          height="150"
+        />
+      </div>
+
+      <!-- User Details -->
+      <div class="mb-3">
+        <h5>Username: {{ user.username }}</h5>
+      </div>
+      <div class="mb-3">
+        <h5>Solved Problems: {{ user.solved_problems_count }}</h5>
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-grid gap-2 mt-4">
+        <!-- View Solved Problems Button -->
+        <a href="{{ url_for('views.solved_problems') }}" class="btn btn-secondary">View Solved Problems</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

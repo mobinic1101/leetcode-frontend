@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <div class="card mx-auto" style="max-width: 600px;">
+    <div class="card-header text-center">
+      <h3 class="text-start">{{ username }}</h3>
+    </div>
+    <div class="card-body text-center">
+      <ul class="list-group list-group-flush text-start">
+        <li class="list-group-item">
+          <strong>Username:</strong> {{ username }}
+        </li>
+        <li class="list-group-item">
+          <strong>First Name:</strong> {{ first_name }}
+        </li>
+        <li class="list-group-item">
+          <strong>Last Name:</strong> {{ last_name }}
+        </li>
+        <li class="list-group-item">
+          <strong>Email:</strong> {{ email }}
+        </li>
+        <li class="list-group-item">
+          <strong>Date Joined:</strong> {{ date_joined }}
+        </li>
+        <li class="list-group-item">
+          <strong>Last Login:</strong> {{ last_login }}
+        </li>
+        <!-- Solved Problems Count and Button -->
+        <li class="list-group-item">
+          <strong>Solved Problems:</strong> {{ solved }}
+          <a href="{{ url_for('views.solved_problems', userid=id) }}" class="btn btn-secondary btn-sm ms-2">View Solved Problems</a>
+        </li>
+      </ul>
+      <hr>
+
+      <!-- Form to Update Profile Picture and Details -->
+      <h4 class="text-start">Update your details</h4>
+      <form action="{{ url_for('views.my_profile') }}" method="POST" enctype="multipart/form-data">
+        <div class="mb-3 text-start">
+          <label for="profile_pic" class="form-label">Profile Picture</label>
+          <input type="file" class="form-control" id="profile_pic" name="profile_pic" />
+        </div>
+        <div class="mb-3 text-start">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            value="{{ username }}"
+            readonly
+          />
+        </div>
+        <div class="mb-3 text-start">
+          <label for="email" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            value="{{ email }}"
+            readonly
+          />
+        </div>
+        <div class="mb-3 text-start">
+          <label for="first_name" class="form-label">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="first_name"
+            name="first_name"
+            value="{{ first_name }}"
+          />
+        </div>
+        <div class="mb-3 text-start">
+          <label for="last_name" class="form-label">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="last_name"
+            name="last_name"
+            value="{{ last_name }}"
+          />
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary">Update Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+

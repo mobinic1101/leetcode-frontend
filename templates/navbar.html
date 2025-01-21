@@ -55,8 +55,7 @@
               {{username}}
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-              <li><a class="dropdown-item" href="/profile">{{username}}</a></li>
-              <li><a class="dropdown-item" href="/settings">Settings</a></li>
+              <li><a class="dropdown-item" href="{{ url_for("views.my_profile") }}">{{username}}</a></li>
               <li>
                 <hr class="dropdown-divider" />
               </li>
