@@ -135,10 +135,10 @@ def my_profile():
 
         # check if profile pic is uploaded
         profile_pic: FileStorage = request.files.get("profile_pic")
-        files = {"profile_pic": profile_pic}
 
         if profile_pic:
             # update with profile pic
+            files = {"profile_pic": utils.convert_to_regular_file(profile_pic)}
             response = client.post("/users/me/", data=form, files=files, headers=utils.get_authorization_header(token))
         else:
             # update without profile pic
