@@ -16,15 +16,19 @@
         <li class="list-group-item">
           <strong>Last Name:</strong> {{ last_name }}
         </li>
+        {% if is_authenticated %}
         <li class="list-group-item">
           <strong>Email:</strong> {{ email }}
         </li>
+        {% endif %}
         <li class="list-group-item">
           <strong>Date Joined:</strong> {{ date_joined }}
         </li>
+        {% if is_authenticated %}
         <li class="list-group-item">
           <strong>Last Login:</strong> {{ last_login }}
         </li>
+        {% endif %}
         <!-- Solved Problems Count and Button -->
         <li class="list-group-item">
           <strong>Solved Problems:</strong> {{ solved }}
@@ -34,6 +38,7 @@
       <hr>
 
       <!-- Form to Update Profile Picture and Details -->
+      {% if is_authenticated %}
       <h4 class="text-start">Update your details</h4>
       <form action="{{ url_for('views.my_profile') }}" method="POST" enctype="multipart/form-data">
         <div class="mb-3 text-start">
@@ -86,6 +91,7 @@
           <button type="submit" class="btn btn-primary">Update Profile</button>
         </div>
       </form>
+      {% endif %}
     </div>
   </div>
 </div>

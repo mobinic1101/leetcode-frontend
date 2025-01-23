@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<ul class="list-group list-group-flush">
+    <!-- Loop through the list -->
+     {% for problem in results %}
+    <a href="{{ url_for('views.problem', problem_id=problem['id_']) }}" class="text-decoration-none">
+      <li class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between">
+            <div>
+              <h5>{{ problem["id_"] }} - {{ problem["title"] }}</h5>
+            </div>
+            <span class="badge bg-secondary">{{ problem["topic"] }}</span>
+        </div>
+        <div>
+            <p>{{ problem["description"] }}</p>
+        </div>
+      </li>
+    </a>
+    {% endfor %}
+  </ul>
+{% endblock content %}

@@ -181,4 +181,11 @@ def problem(problem_id):
 
 @views.route("/solved-problems/<int:userid>", methods=["GET"])
 def solved_problems(userid: int):
-    return "SORRY NOT IMPLEMENTED YET. userid == {}".format(userid)
+    user = api_client.get_quick_user_details()
+    problems = api_client.get(f"/users/{userid}/solved-problems/", extract_data=1)
+    pprint(problems.get_dict())
+
+    return render_template("list_solved.html", **user, **problems.get_dict())
+
+
+    #TODO: handle pagination on pages correctly!
