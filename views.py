@@ -111,7 +111,6 @@ def my_profile():
     token = request.cookies.get("token")
     user = api_client.get("/users/me/", extract_data=1, token=token)
     user_data = user.get_dict()
-    user_data["profile_pic"] = api_client.base_url_raw + user_data.get("profile_pic")
 
     # check if user is logged in
     if user.error:
@@ -153,6 +152,11 @@ def my_profile():
             return render_template("dashboard.html", **user_data)
 
 
+@views.route("/profile/<userid>", methods=["GET"])
+def profile(userid):
+    return f"SORRY NOT IMPLEMENTED YET userid == {userid}"
+
+
 @views.route("/problems", methods=["GET"])
 def problems():
     user = api_client.get_quick_user_details()
@@ -187,5 +191,13 @@ def solved_problems(userid: int):
 
     return render_template("list_solved.html", **user, **problems.get_dict())
 
+
+@views.route("/leaderboards", methods=["GET"])
+def leaderboards():
+    user = api_client.get_quick_user_details()
+    data = api_client.get("/leaderboards/", extract_data=1)
+    data = data.get_dict()
+
+    return render_template("leaderboards.html", **user, data=data)
 
     #TODO: handle pagination on pages correctly!

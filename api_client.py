@@ -89,7 +89,6 @@ class APIClient:
             )
             if response.status_code == 200:
                 data = response.json()
-                data["profile_pic"] = self.base_url_raw + data["profile_pic"] # "http://127.0.0.1:8000/media/profile_pics/someprofile.jpg"
                 quick_user_details.update(data)
                 # quick_user_details["username"] = data["username"]
                 quick_user_details["is_authenticated"] = True

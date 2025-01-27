@@ -34,6 +34,9 @@
           <strong>Solved Problems:</strong> {{ solved }}
           <a href="{{ url_for('views.solved_problems', userid=id) }}" class="btn btn-secondary btn-sm ms-2">View Solved Problems</a>
         </li>
+          <li class="list-group-item">
+          <strong>Rank:</strong> {{ rank }}
+        </li>
       </ul>
       <hr>
 
