@@ -3,13 +3,13 @@
 <div class="container mt-4">
   <div class="card mx-auto" style="max-width: 600px;">
     <div class="card-header text-center">
-      <h3>User {{username}}</h3>
+      <h3>User {{ user['username'] }}</h3>
     </div>
     <div class="card-body text-center">
       <!-- Profile Picture -->
       <div class="mb-3">
         <img
-          src="{{ user.profile_pic }}"
+          src="{{ user['profile_pic'] }}"
           alt="Profile Picture"
           class="rounded-circle"
           width="150"
@@ -19,18 +19,29 @@
 
       <!-- User Details -->
       <div class="mb-3">
-        <h5>Username: {{ user.username }}</h5>
+        <h5>Username: {{ user['username'] }}</h5>
       </div>
+      {% if user['first_name'] %}
       <div class="mb-3">
-        <h5>Solved Problems: {{ user.solved_problems_count }}</h5>
+        <h5>First Name: {{ user['first_name'] }}</h5>
+      </div>
+      {% endif %}
+      {% if user['last_name'] %}
+      <div class="mb-3">
+        <h5>Last Name: {{ user['last_name'] }}</h5>
+      </div>
+      {% endif %}
+      <div class="mb-3">
+        <h5>Solved Problems: {{ user['solved_count'] }}</h5>
       </div>
 
       <!-- Buttons -->
       <div class="d-grid gap-2 mt-4">
         <!-- View Solved Problems Button -->
-        <a href="{{ url_for('views.solved_problems') }}" class="btn btn-secondary">View Solved Problems</a>
+        <a href="{{ url_for('views.solved_problems', userid=user['id']) }}" class="btn btn-secondary">View Solved Problems</a>
       </div>
     </div>
   </div>
 </div>
-{% endblock content %}
+{{ user }}
+

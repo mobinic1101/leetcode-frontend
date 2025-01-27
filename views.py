@@ -154,7 +154,9 @@ def my_profile():
 
 @views.route("/profile/<userid>", methods=["GET"])
 def profile(userid):
-    return f"SORRY NOT IMPLEMENTED YET userid == {userid}"
+    current_user = api_client.get_quick_user_details()
+    context = api_client.get(f"/users/{userid}/", extract_data=True)
+    return render_template("profile.html", **current_user, user=context.get_dict())
 
 
 @views.route("/problems", methods=["GET"])
