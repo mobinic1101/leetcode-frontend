@@ -182,7 +182,21 @@ def problems():
 
 @views.route("/problem/<int:problem_id>", methods=["GET", "POST"])
 def problem(problem_id):
-    return f"SORRY NOT IMPLEMENTED YET problem id == {problem_id}"
+    if request.method == 'GET':
+        user = api_client.get_quick_user_details()
+        problem = api_client.get("/problems/%s/" % problem_id, extract_data=True)
+        testcases = api_client.get("/problems/%s/testcases/" % problem_id)
+        pprint(testcases.json())
+        return render_template("problem.html", **user, **problem.get_dict(), **testcases.json())
+
+    if request.method == "POST":
+        token = request.cookies.get("token")
+        response = api_client.post(
+            "/problems/%s/run/" % problem_id,
+            files={"python_file": request.files.get("python_file")},
+            token=token,
+            extract_data=True,
+        )
 
 
 @views.route("/solved-problems/<int:userid>", methods=["GET"])

@@ -23,7 +23,6 @@ class Context:
         }
         """
         data = {
-            "page_name": self.page_name,
             "error": self.error,
         }
         if isinstance(self.data, dict):
