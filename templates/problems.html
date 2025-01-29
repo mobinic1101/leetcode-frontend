@@ -28,7 +28,9 @@
             </div>
             <div>
               <p>{{ problem["description"] }}</p>
-              <span class="badge bg-secondary">{{ problem["topic"] }}</span>
+              {% for topic in problem["topics"] %}
+                <span class="badge bg-secondary">{{ topic["topic"] }}</span>
+              {% endfor %}
             </div>
           </li>
         </a>

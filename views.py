@@ -170,7 +170,9 @@ def problems():
     topics = request.args.getlist("topic")
 
     # adding query parameters to query_params
-    query_params.update({"search": search, "difficulty": difficulty, "topic": topics if topics else ""})
+    query_params.update({"search": search, "difficulty": difficulty})
+    if topics:
+        query_params["topic"] = topics
     pprint(query_params)
 
     # calling api

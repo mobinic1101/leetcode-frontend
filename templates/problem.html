@@ -1,61 +1,35 @@
 {% extends "base.html" %}
+
 {% block content %}
-<div class="row">
-    <!-- Problem Details Section -->
-    <div class="col-md-6">
-        <div class="container mb-6">
-            <h3>{{ title }}</h3>
-            <hr>
-            <p><strong>Description:</strong> {{ description }}</p>
-            <p><strong>Allowed Imports:</strong> {{ allowed_imports }}</p>
-            <p><strong>Difficulty:</strong> 
-                {% if difficulty == 1 %}
-                    <span class="badge bg-success">Easy</span>
-                {% elif difficulty == 2 %}
-                    <span class="badge bg-warning">Medium</span>
-                {% else %}
-                    <span class="badge bg-danger">Hard</span>
-                {% endif %}
-            </p>
-            <p><strong>Topic:</strong> <span class="badge bg-primary">{{ topic.topic }}</span></p>
-        </div>
-    </div>
+<div class="container">
+    <div class="row">
 
-    <!-- Solution Submission Section -->
-    <div class="col-md-6">
-        <div class="container">
-            <h4>Submit Your Solution</h4>
-            <hr>
-            <form method="POST" action="{{ url_for('views.problem', problem_id=id) }}">
-                <div class="mb-3">
-                    <label for="solution" class="form-label"><strong>Your Code:</strong></label>
-                    <textarea class="form-control" id="solution" name="solution" rows="10">{{ template }}</textarea>
+        <div class="col-8">
+            <h3>{{ id }} - {{ title }}</h3>
+            <div style="display: flex; justify-content: right;">
+                <div style="display: flex; justify-content: space-between;">
+                    {% for topic in topics %}
+                    <span class="badge bg-secondary" style="margin-left: 2px">{{ topic["topic"] }}</span>
+                    {% endfor %}
                 </div>
-                <div style="display: flex; justify-content: right;"><button type="submit" class="btn btn-success">Submit</button></div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Hint Section -->
-    <div class="col-md-6 mt-6">
-        <div class="container">
-            <h4>Hint</h4>
+            </div>
             <hr>
-            <p>{{ hint }}</p>
-        </div>
-    </div>
+            <p>{{ description }}</p>
 
-    <!-- Test Case Section -->
-    <div class="col-md-6 mt-6">
-        <h4>{{count}} Test Cases</h4>
-        <hr>
-        <ul>
-            {% for test_case in results %}
-                <li>Input: <code>{{ test_case['input'] }}</code> | Expected Output: <code>{{ test_case['expected'] }}</code></li>
-            {% endfor %}
-        </ul>
+            <div style="margin-top: 10%;">
+                <h4>Examples</h4>
+                <hr>
+                {% for testcase in results %}
+                    <p>input:<code>{{ testcase["input"] }}</code></p><p>output:<code>{{ testcase["output"] }}</code></p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="col-4">    
+            page navigation section
+            uploading section
+        </div>
+        
     </div>
 </div>
 {% endblock content %}
