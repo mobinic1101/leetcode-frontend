@@ -3,7 +3,6 @@
 {% block content %}
 <div class="container">
     <div class="row">
-
         <div class="col-8">
             <h3>{{ id }} - {{ title }}</h3>
             <div style="display: flex; justify-content: right;">
@@ -19,17 +18,90 @@
             <div style="margin-top: 10%;">
                 <h4>Examples</h4>
                 <hr>
-                {% for testcase in results %}
-                    <p>input:<code>{{ testcase["input"] }}</code></p><p>output:<code>{{ testcase["output"] }}</code></p>
+                {% for testcase in results[:2] %}
+                    <p>input:<code>{{ testcase["input"] }}</code></p><p>output:<code>{{ testcase["expected"] }}</code></p>
                 {% endfor %}
+            </div>
+            <hr>
+            <div>
+                <div class="dropdown open">
+                    <button
+                        class="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        id="hint"
+                        data-bs-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                    >
+                        Hints
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="hint">
+                        <button class="dropdown-item" href="#">{{ hint }}</button>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="col-4">    
-            page navigation section
-            uploading section
+        <div class="col-4">
+            <h3>Your solution:</h3>
+            <hr>
+            <p>
+                Open up your favorite code editor,
+                and write your solution in a function named `solve`:
+            </p>
+            <div style="position: relative;">
+                <code id="template-code">{{ template }}</code>
+                <button id="copy-button" class="btn btn-sm btn-outline-secondary" style="position: absolute; top: 0; right: 0;">
+                    Copy
+                </button>
+            </div>
+            <hr>
+            <h5>Upload your file here</h5>
+            <p>*Only Python*</p>
+            <form action="{{ url_for('views.problem', problem_id=id) }}" method="post" enctype="multipart/form-data">
+                <input class="form-control" type="file" name="python_file" id="file">
+                <input class="btn btn-primary" type="submit" value="Submit" style="display: flex; margin-top: 2%; width: 100%;">
+            </form>
+            <hr>
+            <div class="dropdown open">
+                <button
+                    class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="testCases"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                >
+                    Show TestCases
+                </button>
+                <div class="dropdown-menu" aria-labelledby="testCases">
+                    {% for testcase in results %}
+                    <p class="dropdown-item">in = {{testcase["input"]}}</p>
+                    <p class="dropdown-item">out = {{testcase["expected"]}}</p>
+                    {% endfor %}
+                    </button>
+                </div>
+            </div>
         </div>
-        
     </div>
 </div>
+
+<script>
+    // JavaScript to handle the copy functionality
+    document.getElementById('copy-button').addEventListener('click', function() {
+        // Get the content of the <code> tag
+        const templateCode = document.getElementById('template-code');
+        const copyButton = document.getElementById('copy-button');
+        const codeContent= templateCode.textContent;
+
+        // Use the Clipboard API to copy the content
+        navigator.clipboard.writeText(codeContent).then(function() {
+            // Provide feedback to the user
+            copyButton.innerText = "Copied!"
+        }).catch(function(err) {
+            console.error('Failed to copy: ', err);
+        });
+    });
+</script>
 {% endblock content %}

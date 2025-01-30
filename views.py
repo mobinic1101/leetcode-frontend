@@ -189,6 +189,7 @@ def problem(problem_id):
         problem = api_client.get("/problems/%s/" % problem_id, extract_data=True)
         testcases = api_client.get("/problems/%s/testcases/" % problem_id)
         pprint(testcases.json())
+        pprint(problem.get_dict())
         return render_template("problem.html", **user, **problem.get_dict(), **testcases.json())
 
     if request.method == "POST":
