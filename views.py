@@ -30,6 +30,7 @@ def home():
     context = context.get_dict()
     return render_template("home.html", **context)
 
+
 @views.route("/login", methods=["POST", "GET"])
 def login():
     context = Context(data=api_client.get_quick_user_details())
@@ -102,7 +103,9 @@ def sign_up():
             flash("Passwords don't match", category="error")
         last_used_username = username
 
-    return render_template("sign-up.html", **context.get_dict(), last_used_username = last_used_username)
+    return render_template(
+        "sign-up.html", **context.get_dict(), last_used_username=last_used_username
+    )
 
 
 @views.route("/profile/me", methods=["GET", "POST"])
@@ -118,14 +121,16 @@ def my_profile():
         return redirect(url_for("views.login"), code=302)
 
     # add page name and is_authenticated to user_data
-    user_data.update({"page_name": my_profile.__name__.capitalize(), "is_authenticated": True})
+    user_data.update(
+        {"page_name": my_profile.__name__.capitalize(), "is_authenticated": True}
+    )
 
     # handle GET request
-    if request.method == 'GET':
+    if request.method == "GET":
         return render_template("dashboard.html", **user_data)
 
     # handle POST request
-    if request.method == 'POST':
+    if request.method == "POST":
         # extract form data
         form: dict = utils.extract_form_data(request)
         username = form.get("username")
@@ -138,10 +143,17 @@ def my_profile():
         if profile_pic:
             # update with profile pic
             files = {"profile_pic": utils.convert_to_regular_file(profile_pic)}
-            response = client.post("/users/me/", data=form, files=files, headers=utils.get_authorization_header(token))
+            response = client.post(
+                "/users/me/",
+                data=form,
+                files=files,
+                headers=utils.get_authorization_header(token),
+            )
         else:
             # update without profile pic
-            response = client.post("/users/me/", data=form, headers=utils.get_authorization_header(token))
+            response = client.post(
+                "/users/me/", data=form, headers=utils.get_authorization_header(token)
+            )
 
         # check if response was successful
         if response.status_code == 200:
@@ -176,29 +188,36 @@ def problems():
     pprint(query_params)
 
     # calling api
-    problems_and_topics: list = api_client.get("/problems/", query_params=query_params).json()
+    problems_and_topics: list = api_client.get(
+        "/problems/", query_params=query_params
+    ).json()
     page_name = problems.__name__.capitalize()
     # pprint(problems_and_topics)
-    return render_template("problems.html", **user, **problems_and_topics, page_name=page_name)
+    return render_template(
+        "problems.html", **user, **problems_and_topics, page_name=page_name
+    )
 
 
 @views.route("/problem/<int:problem_id>", methods=["GET", "POST"])
 def problem(problem_id):
-    if request.method == 'GET':
+    if request.method == "GET":
         user = api_client.get_quick_user_details()
         problem = api_client.get("/problems/%s/" % problem_id, extract_data=True)
         testcases = api_client.get("/problems/%s/testcases/" % problem_id)
         pprint(testcases.json())
         pprint(problem.get_dict())
-        return render_template("problem.html", **user, **problem.get_dict(), **testcases.json())
+        code_running_url = str(client.base_url) + f"problems/{problem_id}/run/"
+        code_result_url = str(client.base_url) + f"problems/get-result/{problem_id}/"
+        pprint(code_running_url)
+        pprint(code_result_url)
 
-    if request.method == "POST":
-        token = request.cookies.get("token")
-        response = api_client.post(
-            "/problems/%s/run/" % problem_id,
-            files={"python_file": request.files.get("python_file")},
-            token=token,
-            extract_data=True,
+        return render_template(
+            "problem.html",
+            **user,
+            **problem.get_dict(),
+            **testcases.json(),
+            code_running_url=code_running_url,
+            code_result_url=code_result_url
         )
 
 
@@ -219,4 +238,4 @@ def leaderboards():
 
     return render_template("leaderboards.html", **user, data=data)
 
-    #TODO: handle pagination on pages correctly!
+    # TODO: handle pagination on pages correctly!

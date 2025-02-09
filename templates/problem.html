@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
+<div class="container" id='container'>
     <div class="row">
         <div class="col-8">
             <h3>{{ id }} - {{ title }}</h3>
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-        <div class="col-4">
+        <div class="col-4" id="upload-div">
             <h3>Your solution:</h3>
             <hr>
             <p>
@@ -59,12 +59,12 @@
             <hr>
             <h5>Upload your file here</h5>
             <p>*Only Python*</p>
-            <form action="{{ url_for('views.problem', problem_id=id) }}" method="post" enctype="multipart/form-data">
+            <form action="{{code_running_url}}" enctype="multipart/form-data" id="file-form" data-code-result-url="{{code_result_url}}">
                 <input class="form-control" type="file" name="python_file" id="file">
-                <input class="btn btn-primary" type="submit" value="Submit" style="display: flex; margin-top: 2%; width: 100%;">
+                <input class="btn btn-primary" type="submit" value="Submit" style="display: flex; margin-top: 2%; width: 100%;" id="file-form-submit-btn">
             </form>
             <hr>
-            <div class="dropdown open">
+            <!-- <div class="dropdown open">
                 <button
                     class="btn btn-secondary dropdown-toggle"
                     type="button"
@@ -82,7 +82,16 @@
                     {% endfor %}
                     </button>
                 </div>
-            </div>
+            </div> -->
+            <p>testcases</p>
+            <ul class="list-group list-group-flush">
+                {% for testcase in results %}
+                <li class="list-group-item">
+                    <p>in = {{ testcase["input"] }}</p>
+                    <p>out = {{ testcase["expected"] }}</p>
+                </li>
+                {% endfor %}
+            </ul>
         </div>
     </div>
 </div>
@@ -90,18 +99,25 @@
 <script>
     // JavaScript to handle the copy functionality
     document.getElementById('copy-button').addEventListener('click', function() {
-        // Get the content of the <code> tag
         const templateCode = document.getElementById('template-code');
         const copyButton = document.getElementById('copy-button');
-        const codeContent= templateCode.textContent;
+        const codeContent = templateCode.textContent;
 
         // Use the Clipboard API to copy the content
         navigator.clipboard.writeText(codeContent).then(function() {
             // Provide feedback to the user
-            copyButton.innerText = "Copied!"
+            copyButton.innerText = "Copied!";
+            setTimeout(() => {
+                copyButton.innerText = "Copy";
+            }, 2000); // Reset button text after 2 seconds
         }).catch(function(err) {
             console.error('Failed to copy: ', err);
         });
     });
+
+    // JavaScript to handle the file upload
 </script>
 {% endblock content %}
+{% block js %}
+<script src="{{ url_for('static', filename='js/problem.js') }}"></script>
+{% endblock js %}
